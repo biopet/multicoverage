@@ -7,7 +7,7 @@ object MultiCoverageTest extends BiopetTest {
   @Test
   def testNoArgs(): Unit = {
     intercept[IllegalArgumentException] {
-      ToolTemplate.main(Array())
+      MultiCoverage.main(Array())
     }
   }
 }
