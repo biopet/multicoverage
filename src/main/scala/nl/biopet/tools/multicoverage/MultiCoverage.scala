@@ -3,7 +3,7 @@ package nl.biopet.tools.multicoverage
 import java.io.PrintWriter
 
 import htsjdk.samtools.SamReaderFactory
-import nl.biopet.utils.ngs.BamUtils
+import nl.biopet.utils.ngs.bam
 import nl.biopet.utils.ngs.intervals.BedRecordList
 import nl.biopet.utils.tool.ToolCommand
 
@@ -20,7 +20,7 @@ object MultiCoverage extends ToolCommand {
 
     logger.info("Start")
 
-    val bamFiles = BamUtils.sampleBamMap(cmdArgs.bamFiles)
+    val bamFiles = bam.sampleBamMap(cmdArgs.bamFiles)
 
     val futures = for (region <- BedRecordList.fromFile(cmdArgs.bedFile).allRecords)
       yield
