@@ -8,6 +8,7 @@ import org.testng.annotations.Test
 import scala.io.Source
 
 class MultiCoverageTest extends ToolTest[Args] {
+  def toolCommand: MultiCoverage.type = MultiCoverage
   @Test
   def testNoArgs(): Unit = {
     intercept[IllegalArgumentException] {
