@@ -2,12 +2,13 @@ package nl.biopet.tools.multicoverage
 
 import java.io.File
 
-import nl.biopet.test.BiopetTest
+import nl.biopet.utils.test.tools.ToolTest
 import org.testng.annotations.Test
 
 import scala.io.Source
 
-class MultiCoverageTest extends BiopetTest {
+class MultiCoverageTest extends ToolTest[Args] {
+  def toolCommand: MultiCoverage.type = MultiCoverage
   @Test
   def testNoArgs(): Unit = {
     intercept[IllegalArgumentException] {
