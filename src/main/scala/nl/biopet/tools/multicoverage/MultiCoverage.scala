@@ -22,29 +22,35 @@ object MultiCoverage extends ToolCommand[Args] {
 
     val bamFiles = bam.sampleBamMap(cmdArgs.bamFiles)
 
-    val futures = for (region <- BedRecordList.fromFile(cmdArgs.bedFile).allRecords)
-      yield
-        Future {
-          val samInterval = region.toSamInterval
-          val counts = bamFiles.map {
-            case (sampleName, bamFile) =>
-              val samReader = SamReaderFactory.makeDefault.open(bamFile)
-              val count = samReader
-                .queryOverlapping(samInterval.getContig, samInterval.getStart, samInterval.getEnd)
-                .foldLeft(0L) {
-                  case (bases, samRecord) =>
-                    val start = (samInterval.getStart :: samRecord.getAlignmentStart :: Nil).max
-                    val end = (samInterval.getEnd :: samRecord.getAlignmentEnd + 1 :: Nil).min
-                    val length = end - start
-                    bases + (if (length < 0) 0 else length)
-                }
-              samReader.close()
-              if (cmdArgs.mean && region.length > 0) sampleName -> (count.toDouble / region.length)
-              else if (cmdArgs.mean) sampleName -> 0.0
-              else sampleName -> count
+    val futures =
+      for (region <- BedRecordList.fromFile(cmdArgs.bedFile).allRecords)
+        yield
+          Future {
+            val samInterval = region.toSamInterval
+            val counts = bamFiles.map {
+              case (sampleName, bamFile) =>
+                val samReader = SamReaderFactory.makeDefault.open(bamFile)
+                val count = samReader
+                  .queryOverlapping(samInterval.getContig,
+                                    samInterval.getStart,
+                                    samInterval.getEnd)
+                  .foldLeft(0L) {
+                    case (bases, samRecord) =>
+                      val start =
+                        (samInterval.getStart :: samRecord.getAlignmentStart :: Nil).max
+                      val end =
+                        (samInterval.getEnd :: samRecord.getAlignmentEnd + 1 :: Nil).min
+                      val length = end - start
+                      bases + (if (length < 0) 0 else length)
+                  }
+                samReader.close()
+                if (cmdArgs.mean && region.length > 0)
+                  sampleName -> (count.toDouble / region.length)
+                else if (cmdArgs.mean) sampleName -> 0.0
+                else sampleName -> count
+            }
+            region -> counts
           }
-          region -> counts
-        }
 
     logger.info("Reading bam files")
 

@@ -9,8 +9,9 @@ class ArgsParser(cmdName: String) extends AbstractOptParser[Args](cmdName) {
     (x, c) =>
       c.copy(bedFile = x)
   } text "input bedfile"
-  opt[File]('b', "bamFile") required () unbounded () valueName "<file>" action { (x, c) =>
-    c.copy(bamFiles = x :: c.bamFiles)
+  opt[File]('b', "bamFile") required () unbounded () valueName "<file>" action {
+    (x, c) =>
+      c.copy(bamFiles = x :: c.bamFiles)
   } text "input bam files"
   opt[File]('o', "output") required () maxOccurs 1 unbounded () valueName "<file>" action {
     (x, c) =>
