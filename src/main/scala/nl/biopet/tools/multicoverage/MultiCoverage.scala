@@ -73,19 +73,29 @@ object MultiCoverage extends ToolCommand[Args] {
 
   def descriptionText: String =
     """
-      |This tool determines the coverage of specified regions in multiple BAM files combined.
+      |For a given set of BAM files, this tool calculates the the coverage for
+      |this set of BAM files together. It outputs the coverage per region.
     """.stripMargin
 
   def manualText: String =
     """
-      |This tool determines the coverage of specified regions in multiple BAM files combined.
-      |A tab seperated file containg the coverage for the specified regions.
+      |A bed file is needed for the regions. An unlimited number of BAM files can be
+      |submitted. The output is a tab seperated file that contains the coverage
+      |per region.
     """.stripMargin
 
   def exampleText: String =
     s"""
+       |To check how much is covered by `one.bam` and `another.bam` together:
        | ${example(
-      "-L", "regions.bed", "-b", "one.bam", "-b", "another.bam"  , "-o", "output.txt"
-    )}
+         "-L",
+         "regions.bed",
+         "-b",
+         "one.bam",
+         "-b",
+         "another.bam",
+         "-o",
+         "output.txt"
+       )}
      """.stripMargin
 }
