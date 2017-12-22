@@ -70,4 +70,22 @@ object MultiCoverage extends ToolCommand[Args] {
 
     logger.info("Done")
   }
+
+  def descriptionText: String =
+    """
+      |This tool determines the coverage of specified regions in multiple BAM files combined.
+    """.stripMargin
+
+  def manualText: String =
+    """
+      |This tool determines the coverage of specified regions in multiple BAM files combined.
+      |A tab seperated file containg the coverage for the specified regions.
+    """.stripMargin
+
+  def exampleText: String =
+    s"""
+       | ${example(
+      "-L", "regions.bed", "-b", "one.bam", "-b", "another.bam"  , "-o", "output.txt"
+    )}
+     """.stripMargin
 }
